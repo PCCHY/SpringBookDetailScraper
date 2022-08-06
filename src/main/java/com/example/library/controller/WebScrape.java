@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.library.model.Item;
 import com.example.library.modelDao.ItemDao;
+import com.example.library.webscraper.WebScraperImpl;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -26,12 +28,13 @@ public class WebScrape {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	ItemDao itemDao;
+	WebScraperImpl webScraper;
 	
-	@GetMapping("/products")
-	public List<Item> getAllItems() {
+	@GetMapping("/products/{keyword}")
+	public List<Object> getAllItems(@PathVariable String keyword) {
 		logger.info("Inside Website's product list");
-		return itemDao.scrapeItemsFromWeb(); 
+		//return itemDao.scrapeItemsFromWeb(); 
+		return webScraper.getRecords(keyword);
 	}
 	
 }
